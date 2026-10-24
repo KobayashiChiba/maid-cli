@@ -2,8 +2,8 @@
 
 > 给车万女仆装一套 API —— 读感官、下指令、开会话，附 Python CLI 与 LLM 自省指令表。
 
-> **状态：v1.0.0 已定稿，等待首次发布。** 模组源码（`src/`）、Python CLI（`cli/`）与
-> 建房工具链（`tools/house-building/`）与技能文档（`skill/maid-cli/`）均已就位并完成实测。
+> **状态：v1.0.0 已发布** —— [下载 Release](https://github.com/KobayashiChiba/maid-cli/releases/tag/v1.0.0)
+> （`maid_cli-1.0.0.jar` 丢进服务端 `mods/` 即可）。CI 在 ubuntu + windows 双平台构建通过。
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green.svg)](https://www.minecraft.net/)
