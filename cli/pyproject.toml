@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "maid-cli"
+version = "1.0.0"
+description = "Thin HTTP CLI for the Maid CLI Minecraft mod (Touhou Little Maid)"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["minecraft", "neoforge", "touhou-little-maid", "cli"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
+]
+
+[project.scripts]
+maidcli = "maidcli:cli_entry"
+
+[tool.setuptools]
+py-modules = ["maidcli", "client", "render"]

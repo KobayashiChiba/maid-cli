@@ -1,0 +1,21 @@
+# 默认：源码一律 LF，避免 Windows/Linux 双平台编译出不同换行
+* text=auto eol=lf
+
+*.java   text eol=lf
+*.gradle text eol=lf
+*.py     text eol=lf
+*.md     text eol=lf
+*.json   text eol=lf
+*.toml   text eol=lf
+*.yml    text eol=lf
+
+# 二进制
+*.jar    binary
+*.png    binary
+*.jpg    binary
+*.ogg    binary
+
+# Windows 脚本保留 CRLF
+*.bat    text eol=crlf
+*.cmd    text eol=crlf
+gradlew  text eol=lf

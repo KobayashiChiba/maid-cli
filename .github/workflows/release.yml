@@ -1,0 +1,86 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '要发布的 tag（如 v1.0.0）'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # ① tag 必须和 gradle.properties 的 mod_version 一致，否则发出去的版本号就是假的
+      - name: 校验 tag 与 mod_version 一致
+        shell: bash
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          VER=$(grep -E '^mod_version=' gradle.properties | cut -d= -f2- | tr -d '\r')
+          echo "tag=$TAG  mod_version=$VER"
+          if [ "v$VER" != "$TAG" ]; then
+            echo "::error::tag ($TAG) 与 gradle.properties 的 mod_version (v$VER) 不一致"
+            exit 1
+          fi
+
+      - name: Build
+        run: ./gradlew build --no-daemon --stacktrace
+
+      - name: 改名并核对产物
+        shell: bash
+        run: |
+          VER=$(grep -E '^mod_version=' gradle.properties | cut -d= -f2- | tr -d '\r')
+          ls -la build/libs/
+          # 产物已经在 build.gradle 里定名 maid_cli-<ver>.jar，这里只做存在性校验
+          test -f "build/libs/maid_cli-${VER}.jar" || { echo "::error::找不到 maid_cli-${VER}.jar"; exit 1; }
+          # 体积守卫：打包了 MC/TLM 资源的话会膨胀到几十 MB
+          SIZE=$(stat -c %s "build/libs/maid_cli-${VER}.jar")
+          echo "jar 大小: $SIZE 字节"
+          if [ "$SIZE" -gt 2000000 ]; then
+            echo "::error::jar 超过 2MB —— 很可能把依赖打进去了（应只用 compileOnly）"
+            exit 1
+          fi
+
+      - name: 从 CHANGELOG 抽这一段当 release notes
+        shell: bash
+        run: |
+          VER=$(grep -E '^mod_version=' gradle.properties | cut -d= -f2- | tr -d '\r')
+          awk -v ver="$VER" '
+            $0 ~ "^## \\[" ver "\\]" {flag=1; next}
+            flag && /^## \[/ {exit}
+            flag {print}
+          ' CHANGELOG.md > /tmp/notes.md
+          if [ ! -s /tmp/notes.md ]; then
+            echo "CHANGELOG.md 里没有 [${VER}] 这一节，退回用提交信息" > /tmp/notes.md
+            echo "" >> /tmp/notes.md
+            echo "见提交历史。" >> /tmp/notes.md
+          fi
+          echo "----- notes -----"
+          cat /tmp/notes.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          name: ${{ github.event.inputs.tag || github.ref_name }}
+          body_path: /tmp/notes.md
+          files: build/libs/maid_cli-*.jar
+          fail_on_unmatched_files: true

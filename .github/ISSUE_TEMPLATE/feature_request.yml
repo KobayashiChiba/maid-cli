@@ -1,0 +1,26 @@
+name: Feature request
+description: 想要一条新指令 / 新能力
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 你想让她干什么
+      description: 用「玩家会怎么做」来描述（左键？右键？打开哪个界面？），不要先想 API
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 现在的写法为什么不够
+      description: 如果能用现有 27 条指令绕出来，说明绕起来哪里别扭
+  - type: dropdown
+    id: layer
+    attributes:
+      label: 你猜它属于哪一层
+      options:
+        - 世界操作（走过去 / 挖 / 放 / 用）
+        - 界面操作（容器 / 工位会话）
+        - 查询（她或者世界的状态）
+        - 控制（受控开关 / 模式）
+        - 不确定

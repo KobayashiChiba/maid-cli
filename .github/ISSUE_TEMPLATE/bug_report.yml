@@ -1,0 +1,46 @@
+name: Bug report
+description: 报告一个 bug
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先在 `skill/maid-cli/references/troubleshooting.md` 里找一下，很多问题那儿已经有答案了。
+  - type: input
+    id: mod-version
+    attributes:
+      label: Maid CLI 版本
+      description: README 徽章或 `/ping` 返回的版本号
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 环境
+      description: MC 版本 / NeoForge 版本 / Touhou Little Maid 版本 / 操作系统
+      placeholder: 1.21.1 / 21.1.219 / 1.5.3 / Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 你做了什么
+      description: 完整贴出执行的命令（含参数）
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望的结果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际的结果
+      description: 返回的 JSON 或错误码，以及服务端日志里相关的几行
+      render: json
+    validations:
+      required: true

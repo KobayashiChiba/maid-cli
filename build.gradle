@@ -1,0 +1,106 @@
+plugins {
+    id 'idea'
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.91'
+}
+
+// wrapper 版本写在 gradle/wrapper/gradle-wrapper.properties（8.14.2）
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+// MC 1.20.5 起官方发行 Java 21
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    mavenLocal()
+    // 车万女仆发布在 Modrinth，用它的 maven（pom + jar 实测可取）
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+    // 离线兜底：把 touhoulittlemaid-*.jar 放进 libs/
+    flatDir { dirs 'libs' }
+}
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+        configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+// 让 runClient / runServer 也带上依赖 mod（不然运行时找不到 TLM 的类）
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    // ★ 编译期依赖：不打包进产物（我们的 jar 只含自己的 class）
+    compileOnly "maven.modrinth:touhou-little-maid:${tlm_version}"
+    // 本地跑游戏时真正加载它
+    localRuntime "maven.modrinth:touhou-little-maid:${tlm_version}"
+}
+
+// ─────────────────────────────────────────────────────────────
+//  版本展开：把 ${...} 占位符替换成 gradle.properties 里的值
+//  （只处理 mods.toml，避免误伤其它资源）
+// ─────────────────────────────────────────────────────────────
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            tlm_version_range      : tlm_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            mod_issue_tracker      : mod_issue_tracker,
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+// 统一 UTF-8（源码里有中文注释和 lang 文件）
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// IDEA 里能跳进 MC / TLM 的源码
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

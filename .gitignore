@@ -1,0 +1,63 @@
+# ── 构建产物 ──
+build/
+build-fast/
+out/
+.gradle/
+run/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ── 依赖 jar（离线兜底用，不入库）──
+libs/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# ── IDE ──
+.idea/
+*.iml
+.vscode/
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+.python-version
+*.egg-info/
+dist/
+build/*.egg-info
+
+# ── 日志 / 临时 ──
+logs/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── 本地私货（绝不入库）──
+server.properties
+usercache.json
+usernamecache.json
+ops.json
+whitelist.json
+banned-ips.json
+banned-players.json
+world/
+maid_cli_positions.json
+.maidkey.json
+
+# ── CLI 本地状态 / 打包产物 ──
+.maidcli/
+**/key.json
+
+# ── 工具本地数据 ──
+tools/**/config.json
+tools/**/plan/
+tools/**/schematics/*.litematic
