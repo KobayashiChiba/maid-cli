@@ -131,6 +131,32 @@
 - **参数**：`pos` / `entity` / `face`（贴哪个面）· `item` · `duration`（按住多少 tick）· `aim`
 - **坑**：放置型右键的作用格是 `点击位置.relative(face)`，**不是**被点的方块本身
 
+#### 吃 / 喝（对空气）
+
+```bash
+maidcli use item=minecraft:milk_bucket      # 手上/背包里有就直接喝
+maidcli use item=minecraft:potion           # 药水（自动换手）
+maidcli use                                  # 不指定 item：用手上现有的
+```
+
+**`duration` 不用给** —— 会自动读物品的 `getUseDuration()`（药水/食物 = 32 tick，约 1.6 秒动画）。
+
+**容器返还**（实测 9 种物品，1.0.1 修好）：
+
+| 物品 | 吃完/喝完得到 |
+|---|---|
+| 药水 `potion` | 玻璃瓶 `glass_bottle` |
+| 蜂蜜瓶 `honey_bottle` | 玻璃瓶 `glass_bottle` |
+| 牛奶桶 `milk_bucket` | 空桶 `bucket` |
+| 蘑菇煲 / 兔肉煲 / 甜菜汤 | 碗 `bowl` |
+| 面包 / 金苹果 / 牛排等 | 无（正常消耗）|
+
+> 实现要点（改这块代码时注意）：MC 会在计时归零时**自动完成使用**把物品消耗掉，
+> 而非玩家的 `finishUsingItem` 又**不会**做容器转换 ⇒ 必须**提前几 tick 收手**、
+> 手动扣物品、按类型补容器。**不要试图直接调 `EntityMaid.eat()`**：它走
+> `TamableAnimal.eat` → `LivingEntity.eat`，对非玩家既不消耗、也补不出靠 `craftRemainder`
+> 的物品（牛奶桶就是这么丢的）。
+
 ### `pickup`
 定向捡起**一个**掉落物。
 

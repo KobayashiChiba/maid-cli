@@ -45,8 +45,10 @@ public final class ShootOps {
     public static final int MAX_SIM_TICKS = 60;
     /** 追踪箭落点最多等多少 tick（3 秒够飞很远） */
     public static final int MAX_FLIGHT_TICKS = 100;
-    /** 落点/轨迹离目标在此范围内才算「射得中」 */
-    public static final double HIT_TOLERANCE = 2.0;
+    /** 落点/轨迹离目标在此范围内才算「射得中」
+     *  ⚠️ 0.5 而不是 2.0：2.0 太宽 ⇒ 平射弹道从目标下方 0.66 格擦过也算"可解"
+     *  ⇒ solvePitchWithSpeed 返回 pitch=0（平射）⇒ 箭直接飞过目标 128 格（2026-10-26 实测） */
+    public static final double HIT_TOLERANCE = 0.5;
 
     private ShootOps() {
     }

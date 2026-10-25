@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Maid CLI 1.0.0 —— 控制 Minecraft 里的「女仆」的薄壳。
+"""Maid CLI 1.0.1 —— 控制 Minecraft 里的「女仆」的薄壳。
 
     maidcli <指令> [键=值 ...] [CLI 选项]
 
@@ -41,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from client import Client, CliError  # noqa: E402
 import render  # noqa: E402
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 CLI_FLAGS = {"--maid", "--timeout", "--host", "--port", "--player", "-f", "--file"}
 

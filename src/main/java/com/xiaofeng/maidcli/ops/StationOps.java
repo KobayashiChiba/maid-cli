@@ -598,8 +598,10 @@ public final class StationOps {
                     return false;
                 }
                 // ★ 结果格永远只读 —— 用我们自己的索引判断，不依赖 Menu 的槽位顺序
- // （CraftingMenu 的结果槽在 menu[0]，不这样判会误把材料格当结果格）
-                if (slot == resultSlot(s.kind)) {
+// （CraftingMenu 的结果槽在 menu[0]，不这样判会误把材料格当结果格）
+// ⚠️ 附魔台例外：它是「原地型」，resultSlot=0 同时也是输入格（放要附魔的物品），
+//    如果照这里拒收，box:0 将永远放不进任何东西（2026-10-25 实测踩到）
+                if (slot == resultSlot(s.kind) && s.kind != FaceKind.ENCHANT) {
                     return false;
                 }
                 try {

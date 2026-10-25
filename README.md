@@ -2,8 +2,8 @@
 
 > 给车万女仆装一套 API —— 读感官、下指令、开会话，附 Python CLI 与 LLM 自省指令表。
 
-> **状态：v1.0.0 已发布** —— [下载 Release](https://github.com/KobayashiChiba/maid-cli/releases/tag/v1.0.0)
-> （`maid_cli-1.0.0.jar` 丢进服务端 `mods/` 即可）。CI 在 ubuntu + windows 双平台构建通过。
+> **状态：v1.0.1 已发布** —— [下载 Release](https://github.com/KobayashiChiba/maid-cli/releases/tag/v1.0.1)
+> （`maid_cli-1.0.1.jar` 丢进服务端 `mods/` 即可）。CI 在 ubuntu + windows 双平台构建通过。
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green.svg)](https://www.minecraft.net/)
@@ -97,7 +97,7 @@ maidcli ping                                  # 本地默认地址即可
 python -m venv .venv && . .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -e cli/
 maidcli ping
-# {"ok": true, "mod": "maid_cli", "version": "1.0.0", ...}
+# {"ok": true, "mod": "maid_cli", "version": "1.0.1", ...}
 
 # 3) 登录换 key（第一次必须给玩家名，之后复用 ~/.maidcli/key.json）
 maidcli login <你的玩家名>
@@ -121,7 +121,7 @@ maidcli batch "get follow sit" "get mode"  # 一次请求发多条（最多 32 �
 
 **三种方式**，任选：
 
-1. **Releases 直接下** → 把 `maid_cli-1.0.0.jar` 丢进服务端 `mods/`（推荐给玩家）
+1. **Releases 直接下** → 把 `maid_cli-1.0.1.jar` 丢进服务端 `mods/`（推荐给玩家）
 2. **自己编** → `git clone` 后 `./gradlew build`，产物在 `build/libs/`（需要 JDK 21）
 3. **开发机上极速迭代** → `./gradlew build --offline`（依赖已在 Gradle 缓存里时可用）
 

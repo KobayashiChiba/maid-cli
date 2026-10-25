@@ -1,6 +1,6 @@
 # 一段可照抄的完整演示
 
-前提：服务端装了 NeoForge 21.1.219 + Touhou Little Maid + `maid_cli-1.0.0.jar`，
+前提：服务端装了 NeoForge 21.1.219 + Touhou Little Maid + `maid_cli-1.0.1.jar`，
 世界里有至少一只女仆，模组已加载（`maidcli ping` 能通）。
 
 ## 0. 起服务端
@@ -23,7 +23,7 @@ java -jar neoforge-21.1.219-installer.jar --installServer   # 只需一次
 python -m venv .venv
 . .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -e cli/
-maidcli ping                  # {"ok": true, "mod": "maid_cli", "version": "1.0.0", ...}
+maidcli ping                  # {"ok": true, "mod": "maid_cli", "version": "1.0.1", ...}
 ```
 
 ## 2. 找她
